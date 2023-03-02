@@ -44,13 +44,13 @@ class Motor:
         self.setDirection(direction)
         self.rear_power_pin.pulse_width_percent(c_speed)
 
-class LeftMotor(Motor):
+class RightMotor(Motor):
     def __init__(self):
         super().__init__(PWM('P12'), Pin('D4'))
         self._forward = 1
         self._backward = 0
 
-class RightMotor(Motor):
+class LeftMotor(Motor):
     def __init__(self):
         super().__init__(PWM('P13'), Pin('D5'))
         self._forward = 0
@@ -61,7 +61,7 @@ class DirectionMotor:
     def __init__(self):
         self.direction_pin = Servo(PWM(self.PIN))
         self.current_angle = Database.getLastDirectionMotorAngle()
-        self.calibration_offset = -5
+        self.calibration_offset = -7
 
     def setAngle(self, angle:int):
         self.current_angle = angle

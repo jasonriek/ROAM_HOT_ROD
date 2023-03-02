@@ -8,7 +8,11 @@ from hot_rod_motors import (
 
 DELAY = 0.01
 
-class Driver:
+class Direction:
+    LEFT = 0
+    RIGHT = 1
+
+class Driver(Direction):
     def __init__(self):
         self.left_motor = LeftMotor()
         self.right_motor = RightMotor()
@@ -36,6 +40,14 @@ class Driver:
             for angle in range(last_angle, 0, -1):
                 self.direction_motor.setAngle(angle)
                 sleep(DELAY)
+    
+    def backup(self):
+        self.stop()
+        sleep(1)
+        self.driveBackward(10)
+        sleep(3)
+        self.stop()
+        sleep(1)
 
     def turnSharpRight(self):
         last_angle = self.direction_motor.current_angle
@@ -51,3 +63,23 @@ class Driver:
     
     def saveMotorSettings(self):
         self.direction_motor.save()
+    
+    def turn90Degrees(self, direction=Direction.RIGHT):
+        self.stop()
+        sleep(1)
+        self.center()
+        if direction == Direction.RIGHT:
+            self.turnSharpRight()
+            self.left_motor.drive(10, self.left_motor._backward)
+            self.right_motor.drive(10, self.right_motor._forward)
+            
+        else: # Turn left
+            self.turnSharpLeft()
+            self.left_motor.drive(20, self.left_motor._forward)
+            self.right_motor.drive(30, self.right_motor._backward)
+
+        sleep(0.7)
+        self.stop()
+        sleep(1)
+        self.center()
+        sleep(1)
